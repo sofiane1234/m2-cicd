@@ -28,6 +28,7 @@ pipeline {
             steps {
                 echo 'Unit Testing...'
                 sh 'pip install pytest'
+                sh 'pytest back/tests'
             }
         }
         stage('Deploy') {
