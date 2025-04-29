@@ -2,20 +2,40 @@ pipeline {
     agent any
  
     stages {
-        stage('Build') {
+
+        stage('Checkout code') {
+            agent any
             steps {
+                git branch: 'source', url:'https://github.com/sofiane1234/m2-cicd'
+                sh 'ls -R ${WORKSPACE}'
+            }
+        }
+
+        stage('Build Backend') {
+            agent {
+                label 'docker-agent-python'
+            }
+            steps {
+                sh 'ls -R'
+                sh 'pip install -r back/requirements.txt'
                 echo 'Building..'
             }
         }
         stage('Test') {
+             agent {
+                label 'docker-agent-python-test'
+            }
             steps {
-                echo 'Testing..'
+                unstash 'source-code'
+                sh 'cd backend && pytest || echo "No tests found"'
             }
         }
         stage('Deploy') {
+            agent any
             steps {
                 echo 'Deploying....'
             }
         }
     }
+
 }
