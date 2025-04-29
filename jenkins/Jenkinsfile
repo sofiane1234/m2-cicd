@@ -22,14 +22,26 @@ pipeline {
             }
         }
         stage('Test') {
+            agent {
+                label 'docker-agent-python'
+            }
             steps {
-                echo 'Testing..'
+                echo 'Unit Testing...'
+                echo 'Installing pytest'
+                sh 'pip install pytest pytest-junitxml'
+                sh 'pytest back/tests --maxfail=5 --disable-warnings --tb=short --junitxml=test-results/results.xml'
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
             }
+        }
+    }
+
+    post {
+        always {
+            junit 'test-results/results.xml'
         }
     }
 }
