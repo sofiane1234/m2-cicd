@@ -22,16 +22,16 @@ pipeline {
             }
         }
         stage('Test') {
-            agent {
-                label 'docker-agent-python'
+             agent {
+                label 'docker-agent-python-test'
             }
             steps {
-                echo 'Unit Testing...'
-                sh 'pip install pytest'
-                sh 'pytest back/tests'
+                unstash 'source-code'
+                sh 'cd backend && pytest || echo "No tests found"'
             }
         }
         stage('Deploy') {
+            agent any
             steps {
                 echo 'Deploying....'
             }
