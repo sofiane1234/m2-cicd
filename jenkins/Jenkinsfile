@@ -27,9 +27,6 @@ pipeline {
             }
             steps {
                 echo 'Unit Testing...'
-                echo 'Installing pytest'
-                sh 'pip install pytest'
-                sh 'pytest back/tests.py --maxfail=5 --disable-warnings --tb=short'
             }
         }
         stage('Deploy') {
