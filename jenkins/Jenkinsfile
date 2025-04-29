@@ -28,8 +28,8 @@ pipeline {
             steps {
                 echo 'Unit Testing...'
                 echo 'Installing pytest'
-                sh 'pip install pytest pytest-junitxml'
-                sh 'pytest back/tests --maxfail=5 --disable-warnings --tb=short --junitxml=test-results/results.xml'
+                sh 'pip install pytest'
+                sh 'pytest back/tests --maxfail=5 --disable-warnings --tb=short'
             }
         }
         stage('Deploy') {
@@ -39,9 +39,4 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            junit 'test-results/results.xml'
-        }
-    }
 }
